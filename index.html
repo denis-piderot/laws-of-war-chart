@@ -1,0 +1,1023 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Laws of War Treaties: U.S. Non-Ratification & Global Adoption</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    }
+    .treaty-node {
+      cursor: pointer;
+      transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.25s ease, filter 0.2s ease;
+      transform-box: fill-box;
+      transform-origin: center;
+    }
+    .treaty-node:hover {
+      transform: scale(1.16);
+      filter: drop-shadow(0 6px 12px rgba(15, 23, 42, 0.22));
+    }
+    .treaty-node.selected circle.main-bubble {
+      stroke: #0f172a;
+      stroke-width: 3px;
+    }
+    .treaty-node.dimmed {
+      opacity: 0.14;
+      pointer-events: none;
+    }
+    /* Custom subtle scrollbar */
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #f1f5f9;
+      border-radius: 999px;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #cbd5e1;
+      border-radius: 999px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #94a3b8;
+    }
+  </style>
+</head>
+<body class="bg-slate-50 text-slate-900 antialiased selection:bg-slate-800 selection:text-white">
+
+  <!-- Top Header -->
+  <header class="bg-slate-900 text-white border-b border-slate-800 shadow-sm">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+      <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
+        <div>
+          <div class="inline-flex items-center gap-2 px-2.5 py-1 rounded-full bg-slate-800 border border-slate-700 text-xs font-medium text-slate-300 mb-2">
+            <span class="w-2 h-2 rounded-full bg-rose-500"></span>
+            International Humanitarian Law &amp; Arms Control Tracker
+          </div>
+          <h1 class="text-2xl sm:text-3xl font-extrabold tracking-tight text-white">
+            Laws of War Treaties: U.S. Non-Ratification &amp; Global Adoption
+          </h1>
+          <p class="text-slate-300 text-sm sm:text-base mt-1.5 max-w-3xl">
+            Interactive timeline of 16 major Law of War, disarmament, and war crimes accountability treaties to which the United States is not a State Party. Hover over any node to compare <strong class="text-emerald-300 font-semibold">Ratifiers</strong> vs. <strong class="text-rose-300 font-semibold">Non-Ratifiers</strong>.
+          </p>
+        </div>
+        <div class="flex items-center gap-2 self-start lg:self-center">
+          <button id="resetFiltersBtn" class="px-3.5 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-semibold border border-slate-700 transition cursor-pointer">
+            Reset All Filters
+          </button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-6">
+
+    <!-- KPI Summary Cards -->
+    <section aria-label="Treaty Posture Summary" class="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
+      <!-- Total -->
+      <button data-status-card="All" class="status-kpi text-left bg-white rounded-2xl p-4 sm:p-5 border border-slate-200 shadow-sm hover:border-slate-400 transition cursor-pointer ring-2 ring-slate-900">
+        <div class="flex items-center justify-between">
+          <span class="text-xs font-semibold uppercase tracking-wider text-slate-500">Total Non-Party Treaties</span>
+          <span class="w-2.5 h-2.5 rounded-full bg-slate-800"></span>
+        </div>
+        <div class="mt-2 flex items-baseline gap-2">
+          <span class="text-3xl font-extrabold text-slate-900">16</span>
+          <span class="text-xs text-slate-500">1899 – 2017</span>
+        </div>
+        <p class="text-xs text-slate-500 mt-1">All major unratified IHL &amp; arms treaties</p>
+      </button>
+
+      <!-- Never Signed -->
+      <button data-status-card="Never Signed" class="status-kpi text-left bg-white rounded-2xl p-4 sm:p-5 border border-slate-200 shadow-sm hover:border-rose-400 transition cursor-pointer">
+        <div class="flex items-center justify-between">
+          <span class="text-xs font-semibold uppercase tracking-wider text-rose-700">Never Signed</span>
+          <span class="w-2.5 h-2.5 rounded-full bg-rose-600"></span>
+        </div>
+        <div class="mt-2 flex items-baseline gap-2">
+          <span class="text-3xl font-extrabold text-rose-700">9</span>
+          <span class="text-xs text-slate-500">56.3%</span>
+        </div>
+        <p class="text-xs text-slate-500 mt-1">Executive declined to join from outset</p>
+      </button>
+
+      <!-- Signed, Not Ratified -->
+      <button data-status-card="Signed, Not Ratified" class="status-kpi text-left bg-white rounded-2xl p-4 sm:p-5 border border-slate-200 shadow-sm hover:border-amber-400 transition cursor-pointer">
+        <div class="flex items-center justify-between">
+          <span class="text-xs font-semibold uppercase tracking-wider text-amber-700">Signed, Not Ratified</span>
+          <span class="w-2.5 h-2.5 rounded-full bg-amber-500"></span>
+        </div>
+        <div class="mt-2 flex items-baseline gap-2">
+          <span class="text-3xl font-extrabold text-amber-700">5</span>
+          <span class="text-xs text-slate-500">31.3%</span>
+        </div>
+        <p class="text-xs text-slate-500 mt-1">Lacks 2/3 Senate advice &amp; consent</p>
+      </button>
+
+      <!-- Signature Withdrawn -->
+      <button data-status-card="Signature Withdrawn" class="status-kpi text-left bg-white rounded-2xl p-4 sm:p-5 border border-slate-200 shadow-sm hover:border-purple-400 transition cursor-pointer">
+        <div class="flex items-center justify-between">
+          <span class="text-xs font-semibold uppercase tracking-wider text-purple-700">Signature Withdrawn</span>
+          <span class="w-2.5 h-2.5 rounded-full bg-purple-600"></span>
+        </div>
+        <div class="mt-2 flex items-baseline gap-2">
+          <span class="text-3xl font-extrabold text-purple-700">2</span>
+          <span class="text-xs text-slate-500">12.5%</span>
+        </div>
+        <p class="text-xs text-slate-500 mt-1">Formally "unsigned" via depositary</p>
+      </button>
+    </section>
+
+    <!-- Filter Controls Bar -->
+    <section class="bg-white rounded-2xl p-4 sm:p-5 border border-slate-200 shadow-sm space-y-4">
+      <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
+        <!-- Category Pills -->
+        <div class="space-y-1.5">
+          <label class="block text-xs font-semibold uppercase tracking-wider text-slate-500">Thematic Domain</label>
+          <div id="categoryFilters" class="flex flex-wrap gap-2">
+            <!-- Populated by JS -->
+          </div>
+        </div>
+
+        <!-- Status Pills -->
+        <div class="space-y-1.5">
+          <label class="block text-xs font-semibold uppercase tracking-wider text-slate-500">U.S. Legal Posture</label>
+          <div id="statusFilters" class="flex flex-wrap gap-2">
+            <!-- Populated by JS -->
+          </div>
+        </div>
+      </div>
+
+      <!-- Search & Active Counter -->
+      <div class="pt-3 border-t border-slate-100 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+        <div class="relative flex-1 max-w-md">
+          <svg class="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-4.35-4.35m0 0A7.5 7.5 0 103.5 10.5a7.5 7.5 0 0013.15 6.15z" />
+          </svg>
+          <input id="searchInput" type="text" placeholder="Filter by treaty name or country (e.g., UK, China, ICC, Cluster)..."
+            class="w-full pl-9 pr-4 py-2 text-sm bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-slate-900 focus:bg-white transition" />
+        </div>
+        <div class="text-xs text-slate-600 font-medium">
+          Showing <span id="visibleCount" class="font-bold text-slate-900">16</span> of 16 treaties &bull; <span class="text-slate-500">Bubble size = Global States Parties</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- Main Timeline Visualization Card -->
+    <section class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+      <div class="px-5 py-4 border-b border-slate-100 flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-slate-50/60">
+        <div>
+          <h2 class="text-base font-bold text-slate-900">Historical Adoption &amp; Global Ratification Scale (1899–2017)</h2>
+          <p class="text-xs text-slate-500 mt-0.5">Hover any bubble to view Ratifiers vs. Non-Ratifiers; click to lock details below.</p>
+        </div>
+
+        <!-- Legend -->
+        <div class="flex flex-wrap items-center gap-4 text-xs font-medium text-slate-700">
+          <div class="flex items-center gap-1.5">
+            <span class="w-3 h-3 rounded-full bg-rose-600 inline-block"></span>
+            <span>Never Signed</span>
+          </div>
+          <div class="flex items-center gap-1.5">
+            <span class="w-3 h-3 rounded-full bg-amber-500 inline-block"></span>
+            <span>Signed, Not Ratified</span>
+          </div>
+          <div class="flex items-center gap-1.5">
+            <span class="w-3 h-3 rounded-full bg-purple-600 inline-block"></span>
+            <span>Signature Withdrawn</span>
+          </div>
+          <div class="hidden md:flex items-center gap-1.5 pl-2 border-l border-slate-200 text-slate-500">
+            <span class="w-2.5 h-2.5 rounded-full border border-slate-400 inline-block"></span>
+            <span class="w-4 h-4 rounded-full border border-slate-400 inline-block"></span>
+            <span>Parties (1 → 196)</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Responsive SVG Container -->
+      <div id="chartWrapper" class="relative w-full overflow-x-auto">
+        <div class="min-w-[780px] w-full p-2 sm:p-4">
+          <svg id="timelineSvg" class="w-full h-auto block select-none" aria-label="Laws of War Treaties Timeline Chart"></svg>
+        </div>
+      </div>
+    </section>
+
+    <!-- Pinned / Selected Treaty Inspector & Quick Directory -->
+    <section class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+
+      <!-- Left 5 Cols: Scrollable Treaty List -->
+      <div class="lg:col-span-5 bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+        <div class="px-5 py-3.5 border-b border-slate-100 bg-slate-50/70 flex items-center justify-between">
+          <h3 class="text-sm font-bold text-slate-900">Treaty Directory</h3>
+          <span class="text-xs text-slate-500">Click or hover to inspect</span>
+        </div>
+        <div id="treatyList" class="divide-y divide-slate-100 max-h-[540px] overflow-y-auto">
+          <!-- Populated by JS -->
+        </div>
+      </div>
+
+      <!-- Right 7 Cols: Pinned Detail Panel with Ratifiers vs. Non-Ratifiers -->
+      <div id="detailPanel" class="lg:col-span-7 bg-white rounded-2xl border border-slate-200 shadow-sm p-5 sm:p-6">
+        <!-- Populated by JS -->
+      </div>
+
+    </section>
+  </main>
+
+  <!-- Floating Hover Tooltip (Ratifiers vs. Non-Ratifiers) -->
+  <div id="hoverTooltip" role="tooltip"
+    class="fixed z-50 pointer-events-none opacity-0 transition-opacity duration-150 w-[340px] sm:w-[440px] bg-slate-900/95 backdrop-blur-md text-white rounded-2xl shadow-2xl border border-slate-700/80 p-4 text-xs">
+    <!-- Populated dynamically on hover -->
+  </div>
+
+  <script>
+    // =========================================================================
+    // 1. FACTUALLY VERIFIED DATASET (16 TREATIES)
+    // =========================================================================
+    const TREATIES = [
+      {
+        id: 1,
+        shortName: "Hague Gas Decl. (IV,2)",
+        name: "1899 Hague Declaration (IV,2) on Asphyxiating Gases",
+        yearAdopted: 1899,
+        category: "Conventional Weapons",
+        status: "Never Signed",
+        partiesCount: 34,
+        ratifiers: "UK, France, Germany, Russia, Japan, Italy, Austria-Hungary, Spain, Netherlands, Belgium, Sweden, Switzerland",
+        nonRatifiers: "United States, Ottoman Empire (historical), plus most post-colonial states (superseded by 1925 Geneva Protocol)",
+        reason: "U.S. delegate Alfred Thayer Mahan objected to banning a weapon not yet proven inhumane in combat; later superseded for the U.S. by the 1925 Geneva Protocol."
+      },
+      {
+        id: 2,
+        shortName: "Hague Bullets Decl. (IV,3)",
+        name: "1899 Hague Declaration (IV,3) on Expanding Bullets",
+        yearAdopted: 1899,
+        category: "Conventional Weapons",
+        status: "Never Signed",
+        partiesCount: 34,
+        ratifiers: "UK, France, Germany, Russia, Japan, Italy, Austria-Hungary, Spain, Netherlands, Belgium, China, Sweden",
+        nonRatifiers: "United States (plus many modern states that rely on customary IHL rather than acceding to the 1899 instrument)",
+        reason: "U.S. military argued expanding projectiles were needed for stopping power; U.S. generally abides by the ban in conventional war as customary law while retaining narrow exceptions."
+      },
+      {
+        id: 3,
+        shortName: "Int'l Prize Court (XII)",
+        name: "1907 Hague Convention (XII) — International Prize Court",
+        yearAdopted: 1907,
+        category: "Accountability & Tribunals",
+        status: "Signed, Not Ratified",
+        partiesCount: 1,
+        ratifiers: "Nicaragua (only state to ratify before WWI halted the project)",
+        nonRatifiers: "United States, UK, France, Germany, Russia, Japan, Italy, and all other signatories/states",
+        reason: "Would have allowed appeals from U.S. prize courts to an international tribunal; never entered into force globally."
+      },
+      {
+        id: 4,
+        shortName: "War Crimes Limitations",
+        name: "1968 UN Convention on Non-Applicability of Statutory Limitations to War Crimes",
+        yearAdopted: 1968,
+        category: "Accountability & Tribunals",
+        status: "Never Signed",
+        partiesCount: 56,
+        ratifiers: "Russia, Ukraine, Poland, Hungary, Romania, India, Nigeria, Kenya, Cuba, Vietnam, Philippines, Mexico",
+        nonRatifiers: "United States, UK, France, Germany, Canada, Australia, Japan, China, Israel, Brazil, South Korea",
+        reason: "Concerns over retroactive application (ex post facto law) and overly broad definitions of crimes against humanity."
+      },
+      {
+        id: 5,
+        shortName: "Geneva Protocol I",
+        name: "1977 Additional Protocol I to the Geneva Conventions (International Conflicts)",
+        yearAdopted: 1977,
+        category: "Conduct of Hostilities",
+        status: "Signed, Not Ratified",
+        partiesCount: 174,
+        ratifiers: "UK, France, Germany, Canada, Australia, Japan, Russia, China, Brazil, South Africa, Ukraine, South Korea, nearly all NATO/UN states",
+        nonRatifiers: "United States, Israel, India, Pakistan, Iran, Turkey, Indonesia, Singapore, Malaysia, Myanmar, Azerbaijan",
+        reason: "Rejected by Reagan Administration in 1987 over concerns it blurred combatant/civilian distinctions and legitimized irregular guerrilla fighters."
+      },
+      {
+        id: 6,
+        shortName: "Geneva Protocol II",
+        name: "1977 Additional Protocol II to the Geneva Conventions (Non-International Conflicts)",
+        yearAdopted: 1977,
+        category: "Conduct of Hostilities",
+        status: "Signed, Not Ratified",
+        partiesCount: 170,
+        ratifiers: "UK, France, Germany, Canada, Australia, Japan, Russia, China, Brazil, South Africa, Ukraine, South Korea, Colombia",
+        nonRatifiers: "United States, Israel, India, Pakistan, Iran, Turkey, Indonesia, Iraq, Syria, Somalia, Myanmar",
+        reason: "Transmitted to Senate in 1987 with presidential support, but stalled in the Senate Foreign Relations Committee alongside Protocol I."
+      },
+      {
+        id: 7,
+        shortName: "Rights of the Child (Art. 38)",
+        name: "1989 UN Convention on the Rights of the Child (Art. 38 Armed Conflict Provisions)",
+        yearAdopted: 1989,
+        category: "Conduct of Hostilities",
+        status: "Signed, Not Ratified",
+        partiesCount: 196,
+        ratifiers: "Every UN member state except the U.S. (196 parties including UK, France, China, Russia, India, Brazil, Germany, Japan, Canada, Israel)",
+        nonRatifiers: "United States (the sole UN member state that has not ratified; U.S. did ratify the 2000 Optional Protocol on Children in Armed Conflict in 2002)",
+        reason: "Signed in 1995; stalled over federalism and domestic sovereignty concerns regarding juvenile justice and parental rights."
+      },
+      {
+        id: 8,
+        shortName: "UN Personnel Safety",
+        name: "1994 Convention on the Safety of UN and Associated Personnel",
+        yearAdopted: 1994,
+        category: "Conduct of Hostilities",
+        status: "Signed, Not Ratified",
+        partiesCount: 95,
+        ratifiers: "UK, France, Germany, Canada, Australia, Japan, Russia, China, South Korea, Italy, Brazil, Ukraine, Poland",
+        nonRatifiers: "United States, India, Pakistan, Israel, Iran, Turkey, South Africa, Indonesia, Egypt, Nigeria, Saudi Arabia",
+        reason: "Signed in 1994; stalled in Senate over jurisdictional overlap with U.S. military justice and Status of Forces Agreements."
+      },
+      {
+        id: 9,
+        shortName: "Nuclear-Test-Ban (CTBT)",
+        name: "1996 Comprehensive Nuclear-Test-Ban Treaty (CTBT)",
+        yearAdopted: 1996,
+        category: "Nuclear & WMD",
+        status: "Signed, Not Ratified",
+        partiesCount: 178,
+        ratifiers: "UK, France, Germany, Japan, Canada, Australia, Russia (revoked ratification in 2023), Brazil, South Africa, South Korea, Mexico, Nigeria",
+        nonRatifiers: "United States, China, India, Pakistan, North Korea, Israel, Iran, Egypt, Russia (de-ratified 2023)",
+        reason: "Voted down by the U.S. Senate (51-48) in October 1999 over stockpile reliability and verification concerns."
+      },
+      {
+        id: 10,
+        shortName: "Ottawa Landmine Ban",
+        name: "1997 Ottawa Treaty (Anti-Personnel Mine Ban Convention)",
+        yearAdopted: 1997,
+        category: "Conventional Weapons",
+        status: "Never Signed",
+        partiesCount: 164,
+        ratifiers: "UK, France, Germany, Canada, Australia, Japan, Ukraine, Brazil, South Africa, Italy, Spain, Poland, Finland (announced withdrawal process in 2025)",
+        nonRatifiers: "United States, Russia, China, India, Pakistan, South Korea, North Korea, Israel, Iran, Saudi Arabia, Egypt, Vietnam",
+        reason: "Pentagon cited operational necessity for anti-personnel mines on the Korean Peninsula and lack of viable alternatives."
+      },
+      {
+        id: 11,
+        shortName: "Rome Statute (ICC)",
+        name: "1998 Rome Statute of the International Criminal Court (ICC)",
+        yearAdopted: 1998,
+        category: "Accountability & Tribunals",
+        status: "Signature Withdrawn",
+        partiesCount: 125,
+        ratifiers: "UK, France, Germany, Canada, Australia, Japan, South Korea, Brazil, South Africa, Ukraine, Mexico, Nigeria, Italy, Spain",
+        nonRatifiers: "United States, Russia, China, India, Pakistan, Israel, Iran, Turkey, Saudi Arabia, Egypt, Indonesia, North Korea",
+        reason: "Signed in 2000; Bush Administration formally withdrew signature in May 2002 to shield U.S. service members and officials from non-U.S. jurisdiction."
+      },
+      {
+        id: 12,
+        shortName: "Hague Cultural 2nd Prot.",
+        name: "1999 Second Protocol to the 1954 Hague Cultural Property Convention",
+        yearAdopted: 1999,
+        category: "Conduct of Hostilities",
+        status: "Never Signed",
+        partiesCount: 94,
+        ratifiers: "UK, France, Germany, Italy, Japan, Canada, Brazil, Ukraine, Poland, Spain, Netherlands, Egypt, Saudi Arabia, South Africa",
+        nonRatifiers: "United States, Russia, China, India, Israel, Turkey, South Korea, Australia, Pakistan, North Korea",
+        reason: "U.S. ratified the 1954 Convention in 2009, but declined to join the 1999 Second Protocol due to its stricter target-immunity and universal criminal jurisdiction clauses."
+      },
+      {
+        id: 13,
+        shortName: "Enforced Disappearance",
+        name: "2006 Convention for the Protection of All Persons from Enforced Disappearance",
+        yearAdopted: 2006,
+        category: "Accountability & Tribunals",
+        status: "Never Signed",
+        partiesCount: 77,
+        ratifiers: "France, Germany, Japan, Brazil, Argentina, Mexico, Italy, Spain, Ukraine, Nigeria, South Africa, Colombia, Iraq",
+        nonRatifiers: "United States, UK, Russia, China, India, Israel, Canada, Australia, South Korea, Turkey, Iran, Saudi Arabia",
+        reason: "Drafted during the War on Terror detention era; U.S. objected to strict definitions regarding unacknowledged detention."
+      },
+      {
+        id: 14,
+        shortName: "Cluster Munitions (Oslo)",
+        name: "2008 Convention on Cluster Munitions (Oslo Convention)",
+        yearAdopted: 2008,
+        category: "Conventional Weapons",
+        status: "Never Signed",
+        partiesCount: 112,
+        ratifiers: "UK, France, Germany, Canada, Australia, Japan, Italy, Spain, Norway, Mexico, South Africa, Colombia, Iraq, Afghanistan",
+        nonRatifiers: "United States, Russia, China, India, Pakistan, Israel, Ukraine, South Korea, North Korea, Brazil, Poland, Finland, Turkey, Iran",
+        reason: "U.S. maintained that cluster munitions provide distinct military utility against area targets and reduce collateral damage compared to massed artillery."
+      },
+      {
+        id: 15,
+        shortName: "Arms Trade Treaty (ATT)",
+        name: "2013 Arms Trade Treaty (ATT)",
+        yearAdopted: 2013,
+        category: "Conventional Weapons",
+        status: "Signature Withdrawn",
+        partiesCount: 116,
+        ratifiers: "UK, France, Germany, Japan, South Korea, Australia, Canada, Brazil, Mexico, South Africa, Italy, Spain, Nigeria, Poland",
+        nonRatifiers: "United States, Russia, China, India, Pakistan, Israel, Iran, Saudi Arabia, Egypt, Turkey, North Korea, Indonesia",
+        reason: "Signed in 2013; signature withdrawn in 2019 over sovereignty and Second Amendment domestic regulatory concerns."
+      },
+      {
+        id: 16,
+        shortName: "Nuclear Ban Treaty (TPNW)",
+        name: "2017 Treaty on the Prohibition of Nuclear Weapons (TPNW)",
+        yearAdopted: 2017,
+        category: "Nuclear & WMD",
+        status: "Never Signed",
+        partiesCount: 74,
+        ratifiers: "Mexico, Brazil, South Africa, Austria, Ireland, New Zealand, Thailand, Vietnam, Philippines, Nigeria, Chile, Indonesia, Malaysia",
+        nonRatifiers: "United States, Russia, China, UK, France, India, Pakistan, Israel, North Korea, and all NATO/nuclear-umbrella states (Germany, Japan, South Korea, Australia, Canada)",
+        reason: "Opposed by the U.S. and NATO allies as incompatible with nuclear deterrence strategy and existing NPT frameworks."
+      }
+    ];
+
+    // =========================================================================
+    // 2. STATE & STYLING HELPERS
+    // =========================================================================
+    const CATEGORIES = [
+      "All",
+      "Conduct of Hostilities",
+      "Conventional Weapons",
+      "Nuclear & WMD",
+      "Accountability & Tribunals"
+    ];
+
+    const STATUSES = [
+      "All",
+      "Never Signed",
+      "Signed, Not Ratified",
+      "Signature Withdrawn"
+    ];
+
+    const STATUS_COLORS = {
+      "Never Signed": {
+        fill: "#e11d48",       // rose-600
+        stroke: "#9f1239",     // rose-800
+        badgeBg: "bg-rose-50",
+        badgeText: "text-rose-700",
+        badgeBorder: "border-rose-200",
+        dot: "bg-rose-600"
+      },
+      "Signed, Not Ratified": {
+        fill: "#f59e0b",       // amber-500
+        stroke: "#b45309",     // amber-700
+        badgeBg: "bg-amber-50",
+        badgeText: "text-amber-800",
+        badgeBorder: "border-amber-200",
+        dot: "bg-amber-500"
+      },
+      "Signature Withdrawn": {
+        fill: "#9333ea",       // purple-600
+        stroke: "#6b21a8",     // purple-800
+        badgeBg: "bg-purple-50",
+        badgeText: "text-purple-700",
+        badgeBorder: "border-purple-200",
+        dot: "bg-purple-600"
+      }
+    };
+
+    let state = {
+      selectedCategory: "All",
+      selectedStatus: "All",
+      searchQuery: "",
+      selectedTreatyId: 11 // Default highlight: Rome Statute (ICC)
+    };
+
+    // =========================================================================
+    // 3. FILTERING LOGIC
+    // =========================================================================
+    function getFilteredTreaties() {
+      const q = state.searchQuery.trim().toLowerCase();
+      return TREATIES.filter(t => {
+        const catMatch = state.selectedCategory === "All" || t.category === state.selectedCategory;
+        const statusMatch = state.selectedStatus === "All" || t.status === state.selectedStatus;
+        const searchMatch = !q ||
+          t.name.toLowerCase().includes(q) ||
+          t.shortName.toLowerCase().includes(q) ||
+          t.ratifiers.toLowerCase().includes(q) ||
+          t.nonRatifiers.toLowerCase().includes(q) ||
+          t.reason.toLowerCase().includes(q) ||
+          String(t.yearAdopted).includes(q);
+        return catMatch && statusMatch && searchMatch;
+      });
+    }
+
+    // =========================================================================
+    // 4. RENDER FILTER PILLS & KPI CARDS
+    // =========================================================================
+    function renderFilters() {
+      const catContainer = document.getElementById("categoryFilters");
+      catContainer.innerHTML = CATEGORIES.map(cat => {
+        const active = state.selectedCategory === cat;
+        return `
+          <button data-cat="${cat}"
+            class="cat-pill px-3 py-1.5 rounded-xl text-xs font-semibold transition cursor-pointer border ${
+              active
+                ? "bg-slate-900 text-white border-slate-900 shadow-sm"
+                : "bg-slate-50 text-slate-700 border-slate-200 hover:bg-slate-100"
+            }">
+            ${cat}
+          </button>
+        `;
+      }).join("");
+
+      const statusContainer = document.getElementById("statusFilters");
+      statusContainer.innerHTML = STATUSES.map(st => {
+        const active = state.selectedStatus === st;
+        const dotHtml = st !== "All"
+          ? `<span class="w-2 h-2 rounded-full ${STATUS_COLORS[st].dot} inline-block mr-1.5"></span>`
+          : "";
+        return `
+          <button data-status="${st}"
+            class="status-pill px-3 py-1.5 rounded-xl text-xs font-semibold transition cursor-pointer border flex items-center ${
+              active
+                ? "bg-slate-900 text-white border-slate-900 shadow-sm"
+                : "bg-slate-50 text-slate-700 border-slate-200 hover:bg-slate-100"
+            }">
+            ${dotHtml}${st}
+          </button>
+        `;
+      }).join("");
+
+      // Sync KPI cards active ring
+      document.querySelectorAll(".status-kpi").forEach(card => {
+        const cardStatus = card.getAttribute("data-status-card");
+        if (cardStatus === state.selectedStatus) {
+          card.classList.add("ring-2", "ring-slate-900");
+        } else {
+          card.classList.remove("ring-2", "ring-slate-900");
+        }
+      });
+
+      // Attach listeners
+      catContainer.querySelectorAll(".cat-pill").forEach(btn => {
+        btn.addEventListener("click", () => {
+          state.selectedCategory = btn.getAttribute("data-cat");
+          updateAll();
+        });
+      });
+
+      statusContainer.querySelectorAll(".status-pill").forEach(btn => {
+        btn.addEventListener("click", () => {
+          state.selectedStatus = btn.getAttribute("data-status");
+          updateAll();
+        });
+      });
+    }
+
+    // =========================================================================
+    // 5. RENDER SVG TIMELINE CHART (WITH COLLISION OFFSETS FOR CO-LOCATED YEARS)
+    // =========================================================================
+    function renderTimelineChart() {
+      const svg = document.getElementById("timelineSvg");
+      const filtered = getFilteredTreaties();
+      const filteredIds = new Set(filtered.map(t => t.id));
+
+      document.getElementById("visibleCount").textContent = filtered.length;
+
+      // SVG coordinate space
+      const width = 1040;
+      const height = 430;
+      const margin = { top: 32, right: 44, bottom: 52, left: 195 };
+      const plotW = width - margin.left - margin.right;
+      const plotH = height - margin.top - margin.bottom;
+
+      svg.setAttribute("viewBox", `0 0 ${width} ${height}`);
+
+      const minYear = 1894;
+      const maxYear = 2023;
+      const xScale = (yr) => margin.left + ((yr - minYear) / (maxYear - minYear)) * plotW;
+
+      const rowCategories = [
+        "Conduct of Hostilities",
+        "Conventional Weapons",
+        "Nuclear & WMD",
+        "Accountability & Tribunals"
+      ];
+      const rowHeight = plotH / rowCategories.length;
+      const yCenter = (cat) => {
+        const idx = rowCategories.indexOf(cat);
+        return margin.top + idx * rowHeight + rowHeight / 2;
+      };
+
+      // Radius scale (partiesCount 1 -> 196)
+      const rScale = (parties) => {
+        if (parties <= 1) return 10;
+        return 11 + Math.sqrt(parties / 196) * 19; // 11px to 30px
+      };
+
+      // Small vertical/horizontal nudge for treaties in the exact same year & category (e.g., 1899 or 1977)
+      const offsets = {
+        1: { dx: -7, dy: -16 }, // 1899 Gas
+        2: { dx: 7, dy: 16 },   // 1899 Bullets
+        5: { dx: -8, dy: -17 }, // 1977 Protocol I
+        6: { dx: 8, dy: 17 }    // 1977 Protocol II
+      };
+
+      let svgParts = [];
+
+      // Alternating horizontal swimlane backgrounds
+      rowCategories.forEach((cat, i) => {
+        const yTop = margin.top + i * rowHeight;
+        svgParts.push(`
+          <rect x="${margin.left}" y="${yTop}" width="${plotW}" height="${rowHeight}"
+            fill="${i % 2 === 0 ? '#f8fafc' : '#ffffff'}" />
+          <line x1="${margin.left}" y1="${yTop + rowHeight}" x2="${margin.left + plotW}" y2="${yTop + rowHeight}"
+            stroke="#e2e8f0" stroke-width="1" />
+        `);
+
+        // Category label on left
+        const words = cat.split(" & ");
+        if (words.length === 2) {
+          svgParts.push(`
+            <text x="${margin.left - 14}" y="${yTop + rowHeight / 2 - 5}" text-anchor="end"
+              fill="#1e293b" font-size="12.5" font-weight="700">${words[0]} &amp;</text>
+            <text x="${margin.left - 14}" y="${yTop + rowHeight / 2 + 12}" text-anchor="end"
+              fill="#1e293b" font-size="12.5" font-weight="700">${words[1]}</text>
+          `);
+        } else {
+          svgParts.push(`
+            <text x="${margin.left - 14}" y="${yTop + rowHeight / 2 + 4}" text-anchor="end"
+              fill="#1e293b" font-size="12.5" font-weight="700">${cat}</text>
+          `);
+        }
+      });
+
+      // Top border line
+      svgParts.push(`
+        <line x1="${margin.left}" y1="${margin.top}" x2="${margin.left + plotW}" y2="${margin.top}"
+          stroke="#e2e8f0" stroke-width="1" />
+      `);
+
+      // Vertical Gridlines & Year Ticks
+      const years = [1900, 1920, 1940, 1960, 1980, 2000, 2020];
+      years.forEach(yr => {
+        const x = xScale(yr);
+        svgParts.push(`
+          <line x1="${x}" y1="${margin.top}" x2="${x}" y2="${margin.top + plotH}"
+            stroke="#e2e8f0" stroke-dasharray="4 4" stroke-width="1" />
+          <text x="${x}" y="${margin.top + plotH + 24}" text-anchor="middle"
+            fill="#64748b" font-size="11.5" font-weight="600">${yr}</text>
+        `);
+      });
+
+      // Historical Era Annotations
+      svgParts.push(`
+        <text x="${xScale(1949)}" y="${margin.top - 10}" text-anchor="middle" fill="#94a3b8" font-size="10" font-weight="600">
+          1949 Geneva Conventions (U.S. Ratified)
+        </text>
+        <line x1="${xScale(1949)}" y1="${margin.top}" x2="${xScale(1949)}" y2="${margin.top + plotH}"
+          stroke="#cbd5e1" stroke-width="1.2" />
+      `);
+
+      // Draw Treaty Bubbles (sort larger bubbles behind smaller ones so all remain clickable)
+      const sortedForDraw = [...TREATIES].sort((a, b) => b.partiesCount - a.partiesCount);
+
+      sortedForDraw.forEach(t => {
+        const off = offsets[t.id] || { dx: 0, dy: 0 };
+        const cx = xScale(t.yearAdopted) + off.dx;
+        const cy = yCenter(t.category) + off.dy;
+        const r = rScale(t.partiesCount);
+        const col = STATUS_COLORS[t.status];
+        const isVisible = filteredIds.has(t.id);
+        const isSelected = state.selectedTreatyId === t.id;
+
+        // Label placement adjustment to prevent overlap
+        let labelY = cy + r + 13;
+        let labelX = cx;
+        let anchor = "middle";
+
+        if (t.id === 1 || t.id === 5) {
+          labelY = cy - r - 6;
+        }
+        if (t.id === 16) {
+          anchor = "end";
+          labelX = cx + r;
+        }
+
+        svgParts.push(`
+          <g class="treaty-node ${isVisible ? '' : 'dimmed'} ${isSelected ? 'selected' : ''}"
+             data-id="${t.id}" tabindex="0" role="button" aria-label="${t.name}">
+            <circle class="main-bubble" cx="${cx}" cy="${cy}" r="${r}"
+              fill="${col.fill}" fill-opacity="0.86"
+              stroke="${isSelected ? '#0f172a' : '#ffffff'}"
+              stroke-width="${isSelected ? 3 : 2}" />
+            <text x="${cx}" y="${cy + 3.5}" text-anchor="middle" fill="#ffffff"
+              font-size="${r > 16 ? '10.5' : '9'}" font-weight="700" pointer-events="none">
+              ${t.partiesCount}
+            </text>
+            <text x="${labelX}" y="${labelY}" text-anchor="${anchor}" fill="#334155"
+              font-size="10" font-weight="600" pointer-events="none">
+              ${t.shortName}
+            </text>
+          </g>
+        `);
+      });
+
+      svg.innerHTML = svgParts.join("");
+
+      // Bind hover, move, leave, and click events to every node
+      svg.querySelectorAll(".treaty-node").forEach(node => {
+        const id = Number(node.getAttribute("data-id"));
+        const treaty = TREATIES.find(item => item.id === id);
+
+        node.addEventListener("mouseenter", (e) => showTooltip(treaty, e));
+        node.addEventListener("mousemove", (e) => positionTooltip(e));
+        node.addEventListener("mouseleave", hideTooltip);
+        node.addEventListener("focus", (e) => {
+          const rect = node.getBoundingClientRect();
+          showTooltip(treaty, { clientX: rect.left + rect.width / 2, clientY: rect.top });
+        });
+        node.addEventListener("blur", hideTooltip);
+        node.addEventListener("click", () => {
+          state.selectedTreatyId = id;
+          updateAll();
+        });
+      });
+    }
+
+    // =========================================================================
+    // 6. HOVER TOOLTIP WITH SIDE-BY-SIDE RATIFIERS VS. NON-RATIFIERS
+    // =========================================================================
+    const tooltipEl = document.getElementById("hoverTooltip");
+
+    function showTooltip(treaty, event) {
+      if (!treaty) return;
+      const col = STATUS_COLORS[treaty.status];
+
+      tooltipEl.innerHTML = `
+        <div class="space-y-2.5">
+          <!-- Top Header -->
+          <div class="flex items-start justify-between gap-2 border-b border-slate-700/80 pb-2">
+            <div>
+              <div class="flex items-center gap-1.5 mb-1">
+                <span class="px-2 py-0.5 rounded-md text-[10px] font-bold uppercase tracking-wide bg-slate-800 text-slate-200 border border-slate-700">
+                  ${treaty.yearAdopted} &bull; ${treaty.category}
+                </span>
+              </div>
+              <h4 class="font-bold text-sm text-white leading-snug">${treaty.name}</h4>
+            </div>
+          </div>
+
+          <!-- Status & Global Count Strip -->
+          <div class="flex items-center justify-between bg-slate-800/80 rounded-xl px-3 py-1.5 border border-slate-700/60">
+            <div class="flex items-center gap-1.5">
+              <span class="w-2.5 h-2.5 rounded-full ${col.dot}"></span>
+              <span class="font-semibold text-slate-100">U.S.: ${treaty.status}</span>
+            </div>
+            <div class="text-slate-300 font-semibold">
+              <span class="text-white font-extrabold">${treaty.partiesCount}</span> States Parties
+            </div>
+          </div>
+
+          <!-- Two-Column Comparison: Ratifiers vs. Non-Ratifiers -->
+          <div class="grid grid-cols-2 gap-2.5">
+            <!-- Ratifiers Column -->
+            <div class="bg-emerald-950/60 border border-emerald-700/50 rounded-xl p-2.5">
+              <div class="flex items-center gap-1.5 text-emerald-300 font-bold text-[11px] uppercase tracking-wider mb-1">
+                <svg class="w-3.5 h-3.5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7" />
+                </svg>
+                <span>Ratifiers (${treaty.partiesCount})</span>
+              </div>
+              <p class="text-emerald-100/90 text-[11px] leading-relaxed">
+                ${treaty.ratifiers}
+              </p>
+            </div>
+
+            <!-- Non-Ratifiers Column -->
+            <div class="bg-rose-950/60 border border-rose-700/50 rounded-xl p-2.5">
+              <div class="flex items-center gap-1.5 text-rose-300 font-bold text-[11px] uppercase tracking-wider mb-1">
+                <svg class="w-3.5 h-3.5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+                <span>Non-Ratifiers</span>
+              </div>
+              <p class="text-rose-100/90 text-[11px] leading-relaxed">
+                ${treaty.nonRatifiers}
+              </p>
+            </div>
+          </div>
+
+          <!-- Footer hint -->
+          <div class="text-[10.5px] text-slate-400 flex items-center justify-between pt-0.5">
+            <span>Click bubble to pin full U.S. rationale</span>
+            <span class="text-slate-300 font-medium">IHL Dataset</span>
+          </div>
+        </div>
+      `;
+
+      tooltipEl.classList.remove("opacity-0");
+      tooltipEl.classList.add("opacity-100");
+      positionTooltip(event);
+    }
+
+    function positionTooltip(event) {
+      const pad = 16;
+      const rect = tooltipEl.getBoundingClientRect();
+      const vw = window.innerWidth;
+      const vh = window.innerHeight;
+
+      let left = event.clientX + 18;
+      let top = event.clientY - rect.height / 2;
+
+      // Flip horizontally if overflowing right edge
+      if (left + rect.width + pad > vw) {
+        left = event.clientX - rect.width - 18;
+      }
+      // Clamp horizontally
+      if (left < pad) left = pad;
+
+      // Clamp vertically so it never clips top or bottom
+      if (top < pad) top = pad;
+      if (top + rect.height + pad > vh) {
+        top = vh - rect.height - pad;
+      }
+
+      tooltipEl.style.left = `${left}px`;
+      tooltipEl.style.top = `${top}px`;
+    }
+
+    function hideTooltip() {
+      tooltipEl.classList.remove("opacity-100");
+      tooltipEl.classList.add("opacity-0");
+    }
+
+    // =========================================================================
+    // 7. RENDER DIRECTORY LIST & PINNED DETAIL PANEL
+    // =========================================================================
+    function renderDirectoryAndDetail() {
+      const filtered = getFilteredTreaties();
+      const listEl = document.getElementById("treatyList");
+
+      if (filtered.length === 0) {
+        listEl.innerHTML = `
+          <div class="p-8 text-center text-sm text-slate-500">
+            No treaties match your current filters. Click <strong>Reset All Filters</strong> to restore all 16 treaties.
+          </div>
+        `;
+      } else {
+        listEl.innerHTML = filtered.map(t => {
+          const col = STATUS_COLORS[t.status];
+          const isSelected = t.id === state.selectedTreatyId;
+          return `
+            <button data-list-id="${t.id}"
+              class="treaty-list-btn w-full text-left px-5 py-3.5 transition cursor-pointer flex items-start justify-between gap-3 ${
+                isSelected ? "bg-slate-100/90 border-l-4 border-l-slate-900" : "hover:bg-slate-50"
+              }">
+              <div class="min-w-0">
+                <div class="flex items-center gap-2 mb-1">
+                  <span class="text-xs font-bold text-slate-500">${t.yearAdopted}</span>
+                  <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[11px] font-semibold border ${col.badgeBg} ${col.badgeText} ${col.badgeBorder}">
+                    <span class="w-1.5 h-1.5 rounded-full ${col.dot}"></span>
+                    ${t.status}
+                  </span>
+                </div>
+                <p class="text-sm font-semibold text-slate-900 leading-snug">${t.name}</p>
+                <p class="text-xs text-slate-500 mt-0.5">${t.category}</p>
+              </div>
+              <div class="shrink-0 text-right">
+                <span class="inline-block px-2.5 py-1 rounded-lg bg-slate-100 text-slate-800 text-xs font-bold">
+                  ${t.partiesCount}
+                </span>
+                <span class="block text-[10px] text-slate-400 mt-0.5">Parties</span>
+              </div>
+            </button>
+          `;
+        }).join("");
+
+        listEl.querySelectorAll(".treaty-list-btn").forEach(btn => {
+          const id = Number(btn.getAttribute("data-list-id"));
+          const treaty = TREATIES.find(item => item.id === id);
+          btn.addEventListener("click", () => {
+            state.selectedTreatyId = id;
+            updateAll();
+          });
+          btn.addEventListener("mouseenter", (e) => showTooltip(treaty, e));
+          btn.addEventListener("mousemove", (e) => positionTooltip(e));
+          btn.addEventListener("mouseleave", hideTooltip);
+        });
+      }
+
+      // Render Selected Detail Card
+      const selected = TREATIES.find(t => t.id === state.selectedTreatyId) || filtered[0] || TREATIES[0];
+      const col = STATUS_COLORS[selected.status];
+      const adoptionPct = Math.min(100, Math.round((selected.partiesCount / 196) * 100));
+
+      const detailEl = document.getElementById("detailPanel");
+      detailEl.innerHTML = `
+        <div class="space-y-5">
+          <!-- Header -->
+          <div class="flex flex-col sm:flex-row sm:items-start justify-between gap-3 pb-4 border-b border-slate-100">
+            <div>
+              <div class="flex flex-wrap items-center gap-2 mb-2">
+                <span class="px-2.5 py-1 rounded-lg bg-slate-900 text-white text-xs font-bold">
+                  Adopted ${selected.yearAdopted}
+                </span>
+                <span class="px-2.5 py-1 rounded-lg bg-slate-100 text-slate-700 text-xs font-semibold">
+                  ${selected.category}
+                </span>
+                <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-bold border ${col.badgeBg} ${col.badgeText} ${col.badgeBorder}">
+                  <span class="w-2 h-2 rounded-full ${col.dot}"></span>
+                  U.S. Posture: ${selected.status}
+                </span>
+              </div>
+              <h3 class="text-xl font-extrabold text-slate-900 leading-snug">
+                ${selected.name}
+              </h3>
+            </div>
+          </div>
+
+          <!-- Global Adoption Bar -->
+          <div class="bg-slate-50 rounded-xl p-4 border border-slate-200/80">
+            <div class="flex items-center justify-between text-xs font-semibold mb-1.5">
+              <span class="text-slate-600">Global Adoption Rate (vs. 196 UN/Observer benchmark)</span>
+              <span class="text-slate-900 font-bold">${selected.partiesCount} States Parties (${adoptionPct}%)</span>
+            </div>
+            <div class="w-full h-2.5 bg-slate-200 rounded-full overflow-hidden">
+              <div class="h-full bg-slate-800 rounded-full transition-all duration-300" style="width: ${adoptionPct}%"></div>
+            </div>
+          </div>
+
+          <!-- Side-by-Side Ratifiers vs. Non-Ratifiers -->
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div class="rounded-xl bg-emerald-50/70 border border-emerald-200 p-4">
+              <div class="flex items-center gap-2 text-emerald-800 font-bold text-xs uppercase tracking-wider mb-2">
+                <svg class="w-4 h-4 text-emerald-600 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7" />
+                </svg>
+                <span>Notable Ratifiers (${selected.partiesCount} Total)</span>
+              </div>
+              <p class="text-xs sm:text-sm text-emerald-950 leading-relaxed">
+                ${selected.ratifiers}
+              </p>
+            </div>
+
+            <div class="rounded-xl bg-rose-50/70 border border-rose-200 p-4">
+              <div class="flex items-center gap-2 text-rose-800 font-bold text-xs uppercase tracking-wider mb-2">
+                <svg class="w-4 h-4 text-rose-600 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+                <span>Notable Non-Ratifiers</span>
+              </div>
+              <p class="text-xs sm:text-sm text-rose-950 leading-relaxed">
+                ${selected.nonRatifiers}
+              </p>
+            </div>
+          </div>
+
+          <!-- U.S. Diplomatic & Military Rationale -->
+          <div class="rounded-xl bg-slate-900 text-slate-100 p-4 sm:p-5">
+            <div class="text-xs font-bold uppercase tracking-wider text-slate-400 mb-1.5">
+              U.S. Diplomatic, Constitutional &amp; Military Rationale
+            </div>
+            <p class="text-sm text-slate-100 leading-relaxed">
+              ${selected.reason}
+            </p>
+          </div>
+        </div>
+      `;
+    }
+
+    // =========================================================================
+    // 8. ORCHESTRATE UPDATES & EVENT LISTENERS
+    // =========================================================================
+    function updateAll() {
+      renderFilters();
+      renderTimelineChart();
+      renderDirectoryAndDetail();
+    }
+
+    document.addEventListener("DOMContentLoaded", () => {
+      // KPI card click filtering
+      document.querySelectorAll(".status-kpi").forEach(card => {
+        card.addEventListener("click", () => {
+          const st = card.getAttribute("data-status-card");
+          state.selectedStatus = (state.selectedStatus === st && st !== "All") ? "All" : st;
+          updateAll();
+        });
+      });
+
+      // Search input
+      const searchInput = document.getElementById("searchInput");
+      searchInput.addEventListener("input", (e) => {
+        state.searchQuery = e.target.value;
+        updateAll();
+      });
+
+      // Reset button
+      document.getElementById("resetFiltersBtn").addEventListener("click", () => {
+        state.selectedCategory = "All";
+        state.selectedStatus = "All";
+        state.searchQuery = "";
+        searchInput.value = "";
+        updateAll();
+      });
+
+      updateAll();
+    });
+  </script>
+</body>
+</html>
