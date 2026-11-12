@@ -26,8 +26,15 @@
       stroke: #0f172a;
       stroke-width: 3px;
     }
+    .treaty-node.ratified-bg circle.main-bubble {
+      transition: fill-opacity 0.2s ease, stroke 0.2s ease;
+    }
+    .treaty-node.ratified-bg:hover circle.main-bubble {
+      fill-opacity: 0.72;
+      stroke: #334155;
+    }
     .treaty-node.dimmed {
-      opacity: 0.14;
+      opacity: 0.12;
       pointer-events: none;
     }
     /* Custom subtle scrollbar */
@@ -63,10 +70,14 @@
             Laws of War Treaties: U.S. Non-Ratification &amp; Global Adoption
           </h1>
           <p class="text-slate-300 text-sm sm:text-base mt-1.5 max-w-3xl">
-            Interactive timeline of 16 major Law of War, disarmament, and war crimes accountability treaties to which the United States is not a State Party. Hover over any node to compare <strong class="text-emerald-300 font-semibold">Ratifiers</strong> vs. <strong class="text-rose-300 font-semibold">Non-Ratifiers</strong>.
+            Interactive timeline comparing 16 major Law of War treaties the United States has <strong class="text-rose-300 font-semibold">not ratified</strong> against 14 foundational treaties the U.S. <strong class="text-slate-200 font-semibold">did sign &amp; ratify</strong> (shown in muted grey in the background). Hover any node to compare <strong class="text-emerald-300 font-semibold">Ratifiers</strong> vs. <strong class="text-rose-300 font-semibold">Non-Ratifiers</strong>.
           </p>
         </div>
         <div class="flex items-center gap-2 self-start lg:self-center">
+          <button id="toggleRatifiedBtn" class="px-3.5 py-2 rounded-xl bg-slate-700 hover:bg-slate-600 text-white text-xs font-semibold border border-slate-500 transition cursor-pointer flex items-center gap-1.5">
+            <span id="toggleRatifiedDot" class="w-2.5 h-2.5 rounded-full bg-slate-400"></span>
+            <span id="toggleRatifiedText">Hide U.S. Ratified (Grey)</span>
+          </button>
           <button id="resetFiltersBtn" class="px-3.5 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-semibold border border-slate-700 transition cursor-pointer">
             Reset All Filters
           </button>
@@ -79,57 +90,70 @@
   <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-6">
 
     <!-- KPI Summary Cards -->
-    <section aria-label="Treaty Posture Summary" class="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
+    <section aria-label="Treaty Posture Summary" class="grid grid-cols-2 lg:grid-cols-5 gap-3 sm:gap-4">
       <!-- Total -->
-      <button data-status-card="All" class="status-kpi text-left bg-white rounded-2xl p-4 sm:p-5 border border-slate-200 shadow-sm hover:border-slate-400 transition cursor-pointer ring-2 ring-slate-900">
+      <button data-status-card="All" class="status-kpi text-left bg-white rounded-2xl p-4 border border-slate-200 shadow-sm hover:border-slate-400 transition cursor-pointer ring-2 ring-slate-900">
         <div class="flex items-center justify-between">
-          <span class="text-xs font-semibold uppercase tracking-wider text-slate-500">Total Non-Party Treaties</span>
+          <span class="text-[11px] font-semibold uppercase tracking-wider text-slate-500">All Tracked Treaties</span>
           <span class="w-2.5 h-2.5 rounded-full bg-slate-800"></span>
         </div>
         <div class="mt-2 flex items-baseline gap-2">
-          <span class="text-3xl font-extrabold text-slate-900">16</span>
+          <span class="text-2xl sm:text-3xl font-extrabold text-slate-900">30</span>
           <span class="text-xs text-slate-500">1899 – 2017</span>
         </div>
-        <p class="text-xs text-slate-500 mt-1">All major unratified IHL &amp; arms treaties</p>
+        <p class="text-xs text-slate-500 mt-1">16 non-party + 14 U.S. ratified</p>
       </button>
 
       <!-- Never Signed -->
-      <button data-status-card="Never Signed" class="status-kpi text-left bg-white rounded-2xl p-4 sm:p-5 border border-slate-200 shadow-sm hover:border-rose-400 transition cursor-pointer">
+      <button data-status-card="Never Signed" class="status-kpi text-left bg-white rounded-2xl p-4 border border-slate-200 shadow-sm hover:border-rose-400 transition cursor-pointer">
         <div class="flex items-center justify-between">
-          <span class="text-xs font-semibold uppercase tracking-wider text-rose-700">Never Signed</span>
+          <span class="text-[11px] font-semibold uppercase tracking-wider text-rose-700">Never Signed</span>
           <span class="w-2.5 h-2.5 rounded-full bg-rose-600"></span>
         </div>
         <div class="mt-2 flex items-baseline gap-2">
-          <span class="text-3xl font-extrabold text-rose-700">9</span>
-          <span class="text-xs text-slate-500">56.3%</span>
+          <span class="text-2xl sm:text-3xl font-extrabold text-rose-700">9</span>
+          <span class="text-xs text-slate-500">Non-Party</span>
         </div>
-        <p class="text-xs text-slate-500 mt-1">Executive declined to join from outset</p>
+        <p class="text-xs text-slate-500 mt-1">Declined to join from outset</p>
       </button>
 
       <!-- Signed, Not Ratified -->
-      <button data-status-card="Signed, Not Ratified" class="status-kpi text-left bg-white rounded-2xl p-4 sm:p-5 border border-slate-200 shadow-sm hover:border-amber-400 transition cursor-pointer">
+      <button data-status-card="Signed, Not Ratified" class="status-kpi text-left bg-white rounded-2xl p-4 border border-slate-200 shadow-sm hover:border-amber-400 transition cursor-pointer">
         <div class="flex items-center justify-between">
-          <span class="text-xs font-semibold uppercase tracking-wider text-amber-700">Signed, Not Ratified</span>
+          <span class="text-[11px] font-semibold uppercase tracking-wider text-amber-700">Signed, Not Ratified</span>
           <span class="w-2.5 h-2.5 rounded-full bg-amber-500"></span>
         </div>
         <div class="mt-2 flex items-baseline gap-2">
-          <span class="text-3xl font-extrabold text-amber-700">5</span>
-          <span class="text-xs text-slate-500">31.3%</span>
+          <span class="text-2xl sm:text-3xl font-extrabold text-amber-700">5</span>
+          <span class="text-xs text-slate-500">Non-Party</span>
         </div>
-        <p class="text-xs text-slate-500 mt-1">Lacks 2/3 Senate advice &amp; consent</p>
+        <p class="text-xs text-slate-500 mt-1">Lacks 2/3 Senate consent</p>
       </button>
 
       <!-- Signature Withdrawn -->
-      <button data-status-card="Signature Withdrawn" class="status-kpi text-left bg-white rounded-2xl p-4 sm:p-5 border border-slate-200 shadow-sm hover:border-purple-400 transition cursor-pointer">
+      <button data-status-card="Signature Withdrawn" class="status-kpi text-left bg-white rounded-2xl p-4 border border-slate-200 shadow-sm hover:border-purple-400 transition cursor-pointer">
         <div class="flex items-center justify-between">
-          <span class="text-xs font-semibold uppercase tracking-wider text-purple-700">Signature Withdrawn</span>
+          <span class="text-[11px] font-semibold uppercase tracking-wider text-purple-700">Signature Withdrawn</span>
           <span class="w-2.5 h-2.5 rounded-full bg-purple-600"></span>
         </div>
         <div class="mt-2 flex items-baseline gap-2">
-          <span class="text-3xl font-extrabold text-purple-700">2</span>
-          <span class="text-xs text-slate-500">12.5%</span>
+          <span class="text-2xl sm:text-3xl font-extrabold text-purple-700">2</span>
+          <span class="text-xs text-slate-500">Non-Party</span>
         </div>
-        <p class="text-xs text-slate-500 mt-1">Formally "unsigned" via depositary</p>
+        <p class="text-xs text-slate-500 mt-1">Formally "unsigned" via UN</p>
+      </button>
+
+      <!-- Signed & Ratified (Background Baseline) -->
+      <button data-status-card="Signed & Ratified" class="col-span-2 lg:col-span-1 status-kpi text-left bg-slate-100/80 rounded-2xl p-4 border border-slate-300 shadow-sm hover:border-slate-500 transition cursor-pointer">
+        <div class="flex items-center justify-between">
+          <span class="text-[11px] font-semibold uppercase tracking-wider text-slate-600">Signed &amp; Ratified</span>
+          <span class="w-2.5 h-2.5 rounded-full bg-slate-400"></span>
+        </div>
+        <div class="mt-2 flex items-baseline gap-2">
+          <span class="text-2xl sm:text-3xl font-extrabold text-slate-700">14</span>
+          <span class="text-xs text-slate-500">U.S. Party</span>
+        </div>
+        <p class="text-xs text-slate-500 mt-1">Grey background baseline</p>
       </button>
     </section>
 
@@ -163,7 +187,7 @@
             class="w-full pl-9 pr-4 py-2 text-sm bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-slate-900 focus:bg-white transition" />
         </div>
         <div class="text-xs text-slate-600 font-medium">
-          Showing <span id="visibleCount" class="font-bold text-slate-900">16</span> of 16 treaties &bull; <span class="text-slate-500">Bubble size = Global States Parties</span>
+          Showing <span id="visibleCount" class="font-bold text-slate-900">30</span> of 30 treaties &bull; <span class="text-slate-500">Bubble size = Global States Parties</span>
         </div>
       </div>
     </section>
@@ -173,11 +197,11 @@
       <div class="px-5 py-4 border-b border-slate-100 flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-slate-50/60">
         <div>
           <h2 class="text-base font-bold text-slate-900">Historical Adoption &amp; Global Ratification Scale (1899–2017)</h2>
-          <p class="text-xs text-slate-500 mt-0.5">Hover any bubble to view Ratifiers vs. Non-Ratifiers; click to lock details below.</p>
+          <p class="text-xs text-slate-500 mt-0.5">Colored foreground = U.S. non-party &bull; Muted grey background = U.S. signed &amp; ratified. Hover any node to compare Ratifiers vs. Non-Ratifiers.</p>
         </div>
 
         <!-- Legend -->
-        <div class="flex flex-wrap items-center gap-4 text-xs font-medium text-slate-700">
+        <div class="flex flex-wrap items-center gap-3.5 text-xs font-medium text-slate-700">
           <div class="flex items-center gap-1.5">
             <span class="w-3 h-3 rounded-full bg-rose-600 inline-block"></span>
             <span>Never Signed</span>
@@ -190,10 +214,9 @@
             <span class="w-3 h-3 rounded-full bg-purple-600 inline-block"></span>
             <span>Signature Withdrawn</span>
           </div>
-          <div class="hidden md:flex items-center gap-1.5 pl-2 border-l border-slate-200 text-slate-500">
-            <span class="w-2.5 h-2.5 rounded-full border border-slate-400 inline-block"></span>
-            <span class="w-4 h-4 rounded-full border border-slate-400 inline-block"></span>
-            <span>Parties (1 → 196)</span>
+          <div class="flex items-center gap-1.5 pl-2 border-l border-slate-200 text-slate-500">
+            <span class="w-3 h-3 rounded-full bg-slate-400/60 border border-slate-400 inline-block"></span>
+            <span>U.S. Signed &amp; Ratified</span>
           </div>
         </div>
       </div>
@@ -236,14 +259,16 @@
 
   <script>
     // =========================================================================
-    // 1. FACTUALLY VERIFIED DATASET (16 TREATIES)
+    // 1. FACTUALLY VERIFIED DATASET (16 NON-PARTY + 14 U.S.-RATIFIED TREATIES)
     // =========================================================================
     const TREATIES = [
+      // --- U.S. NON-PARTY TREATIES (16) ---
       {
         id: 1,
         shortName: "Hague Gas Decl. (IV,2)",
         name: "1899 Hague Declaration (IV,2) on Asphyxiating Gases",
         yearAdopted: 1899,
+        usRatifiedYear: null,
         category: "Conventional Weapons",
         status: "Never Signed",
         partiesCount: 34,
@@ -256,6 +281,7 @@
         shortName: "Hague Bullets Decl. (IV,3)",
         name: "1899 Hague Declaration (IV,3) on Expanding Bullets",
         yearAdopted: 1899,
+        usRatifiedYear: null,
         category: "Conventional Weapons",
         status: "Never Signed",
         partiesCount: 34,
@@ -268,6 +294,7 @@
         shortName: "Int'l Prize Court (XII)",
         name: "1907 Hague Convention (XII) — International Prize Court",
         yearAdopted: 1907,
+        usRatifiedYear: null,
         category: "Accountability & Tribunals",
         status: "Signed, Not Ratified",
         partiesCount: 1,
@@ -280,6 +307,7 @@
         shortName: "War Crimes Limitations",
         name: "1968 UN Convention on Non-Applicability of Statutory Limitations to War Crimes",
         yearAdopted: 1968,
+        usRatifiedYear: null,
         category: "Accountability & Tribunals",
         status: "Never Signed",
         partiesCount: 56,
@@ -292,6 +320,7 @@
         shortName: "Geneva Protocol I",
         name: "1977 Additional Protocol I to the Geneva Conventions (International Conflicts)",
         yearAdopted: 1977,
+        usRatifiedYear: null,
         category: "Conduct of Hostilities",
         status: "Signed, Not Ratified",
         partiesCount: 174,
@@ -304,6 +333,7 @@
         shortName: "Geneva Protocol II",
         name: "1977 Additional Protocol II to the Geneva Conventions (Non-International Conflicts)",
         yearAdopted: 1977,
+        usRatifiedYear: null,
         category: "Conduct of Hostilities",
         status: "Signed, Not Ratified",
         partiesCount: 170,
@@ -316,6 +346,7 @@
         shortName: "Rights of the Child (Art. 38)",
         name: "1989 UN Convention on the Rights of the Child (Art. 38 Armed Conflict Provisions)",
         yearAdopted: 1989,
+        usRatifiedYear: null,
         category: "Conduct of Hostilities",
         status: "Signed, Not Ratified",
         partiesCount: 196,
@@ -328,6 +359,7 @@
         shortName: "UN Personnel Safety",
         name: "1994 Convention on the Safety of UN and Associated Personnel",
         yearAdopted: 1994,
+        usRatifiedYear: null,
         category: "Conduct of Hostilities",
         status: "Signed, Not Ratified",
         partiesCount: 95,
@@ -340,6 +372,7 @@
         shortName: "Nuclear-Test-Ban (CTBT)",
         name: "1996 Comprehensive Nuclear-Test-Ban Treaty (CTBT)",
         yearAdopted: 1996,
+        usRatifiedYear: null,
         category: "Nuclear & WMD",
         status: "Signed, Not Ratified",
         partiesCount: 178,
@@ -352,6 +385,7 @@
         shortName: "Ottawa Landmine Ban",
         name: "1997 Ottawa Treaty (Anti-Personnel Mine Ban Convention)",
         yearAdopted: 1997,
+        usRatifiedYear: null,
         category: "Conventional Weapons",
         status: "Never Signed",
         partiesCount: 164,
@@ -364,6 +398,7 @@
         shortName: "Rome Statute (ICC)",
         name: "1998 Rome Statute of the International Criminal Court (ICC)",
         yearAdopted: 1998,
+        usRatifiedYear: null,
         category: "Accountability & Tribunals",
         status: "Signature Withdrawn",
         partiesCount: 125,
@@ -376,6 +411,7 @@
         shortName: "Hague Cultural 2nd Prot.",
         name: "1999 Second Protocol to the 1954 Hague Cultural Property Convention",
         yearAdopted: 1999,
+        usRatifiedYear: null,
         category: "Conduct of Hostilities",
         status: "Never Signed",
         partiesCount: 94,
@@ -388,6 +424,7 @@
         shortName: "Enforced Disappearance",
         name: "2006 Convention for the Protection of All Persons from Enforced Disappearance",
         yearAdopted: 2006,
+        usRatifiedYear: null,
         category: "Accountability & Tribunals",
         status: "Never Signed",
         partiesCount: 77,
@@ -400,6 +437,7 @@
         shortName: "Cluster Munitions (Oslo)",
         name: "2008 Convention on Cluster Munitions (Oslo Convention)",
         yearAdopted: 2008,
+        usRatifiedYear: null,
         category: "Conventional Weapons",
         status: "Never Signed",
         partiesCount: 112,
@@ -412,6 +450,7 @@
         shortName: "Arms Trade Treaty (ATT)",
         name: "2013 Arms Trade Treaty (ATT)",
         yearAdopted: 2013,
+        usRatifiedYear: null,
         category: "Conventional Weapons",
         status: "Signature Withdrawn",
         partiesCount: 116,
@@ -424,12 +463,197 @@
         shortName: "Nuclear Ban Treaty (TPNW)",
         name: "2017 Treaty on the Prohibition of Nuclear Weapons (TPNW)",
         yearAdopted: 2017,
+        usRatifiedYear: null,
         category: "Nuclear & WMD",
         status: "Never Signed",
         partiesCount: 74,
         ratifiers: "Mexico, Brazil, South Africa, Austria, Ireland, New Zealand, Thailand, Vietnam, Philippines, Nigeria, Chile, Indonesia, Malaysia",
         nonRatifiers: "United States, Russia, China, UK, France, India, Pakistan, Israel, North Korea, and all NATO/nuclear-umbrella states (Germany, Japan, South Korea, Australia, Canada)",
         reason: "Opposed by the U.S. and NATO allies as incompatible with nuclear deterrence strategy and existing NPT frameworks."
+      },
+
+      // --- U.S. SIGNED & RATIFIED TREATIES (14 BACKGROUND BASELINE) ---
+      {
+        id: 17,
+        shortName: "1907 Hague Conventions",
+        name: "1907 Hague Conventions (III, IV, V, VIII, IX, XI) on Land & Naval Warfare",
+        yearAdopted: 1907,
+        usRatifiedYear: 1909,
+        category: "Conduct of Hostilities",
+        status: "Signed & Ratified",
+        partiesCount: 41,
+        ratifiers: "United States (1909), UK, France, Germany, Russia, Japan, China, Brazil, Mexico, Netherlands, Belgium, Sweden, Switzerland",
+        nonRatifiers: "Italy (did not ratify 1907 IV), Ottoman Empire, plus newer post-1945 states bound instead via customary international law",
+        reason: "Foundational treaty law of land and naval warfare ratified by the U.S. Senate in 1908–1909; forms the core of U.S. military targeting and occupation rules."
+      },
+      {
+        id: 18,
+        shortName: "1925 Geneva Gas Protocol",
+        name: "1925 Protocol for the Prohibition of Asphyxiating, Poisonous or Other Gases",
+        yearAdopted: 1925,
+        usRatifiedYear: 1975,
+        category: "Nuclear & WMD",
+        status: "Signed & Ratified",
+        partiesCount: 146,
+        ratifiers: "United States (1975), UK, France, Germany, Russia, China, Japan, India, Pakistan, Israel, Iran, North Korea, Canada, Australia",
+        nonRatifiers: "Around 50 mostly smaller states (e.g., Kazakhstan, Uzbekistan, Azerbaijan, Oman, UAE, Chad, Somalia)",
+        reason: "Signed by the U.S. in 1925; ratified in 1975 after the Vietnam War with a no-first-use reservation later superseded by the 1993 CWC."
+      },
+      {
+        id: 19,
+        shortName: "1929 Geneva POW Conv.",
+        name: "1929 Geneva Convention Relative to the Treatment of Prisoners of War",
+        yearAdopted: 1929,
+        usRatifiedYear: 1932,
+        category: "Conduct of Hostilities",
+        status: "Signed & Ratified",
+        partiesCount: 53,
+        ratifiers: "United States (1932), UK, France, Germany, Italy, China, Canada, Australia, India, Brazil, Poland, Spain, Switzerland",
+        nonRatifiers: "Soviet Union (USSR) and Japan (signed but never ratified prior to WWII); superseded globally by the 1949 Geneva Convention III",
+        reason: "Ratified by the U.S. in 1932; governed Allied treatment of German and Italian POWs during World War II before being replaced in 1949."
+      },
+      {
+        id: 20,
+        shortName: "1948 Genocide Convention",
+        name: "1948 Convention on the Prevention and Punishment of the Crime of Genocide",
+        yearAdopted: 1948,
+        usRatifiedYear: 1988,
+        category: "Accountability & Tribunals",
+        status: "Signed & Ratified",
+        partiesCount: 153,
+        ratifiers: "United States (1988), UK, France, Russia, China, Germany, Japan, India, Israel, Brazil, Canada, Australia, Ukraine, South Africa",
+        nonRatifiers: "Around 44 states including Indonesia, Thailand, Japan (ratified late in 2023—now party), Angola, Kenya, Oman, Qatar",
+        reason: "Signed in 1948; ratified by the U.S. in 1988 under President Reagan with sovereignty reservations regarding ICJ jurisdiction."
+      },
+      {
+        id: 21,
+        shortName: "1949 Geneva Conventions",
+        name: "1949 Geneva Conventions (I–IV) for the Protection of War Victims",
+        yearAdopted: 1949,
+        usRatifiedYear: 1955,
+        category: "Conduct of Hostilities",
+        status: "Signed & Ratified",
+        partiesCount: 196,
+        ratifiers: "Universal ratification (196 States Parties): United States (1955), UK, France, Russia, China, India, Israel, Iran, North Korea, and every UN state",
+        nonRatifiers: "None (universally ratified by all 193 UN member states plus Holy See, Palestine, and Cook Islands)",
+        reason: "Cornerstone of modern International Humanitarian Law; ratified by the U.S. Senate in 1955 with broad bipartisan consensus."
+      },
+      {
+        id: 22,
+        shortName: "1954 Hague Cultural Conv.",
+        name: "1954 Hague Convention for the Protection of Cultural Property in Armed Conflict",
+        yearAdopted: 1954,
+        usRatifiedYear: 2009,
+        category: "Conduct of Hostilities",
+        status: "Signed & Ratified",
+        partiesCount: 136,
+        ratifiers: "United States (2009), UK, France, Germany, Russia, China, Japan, India, Pakistan, Israel, Iran, Egypt, Iraq, Ukraine, Italy",
+        nonRatifiers: "Around 60 states including South Korea, North Korea, Philippines, Vietnam, Indonesia, Algeria, Kenya",
+        reason: "Signed in 1954; ratified by the U.S. in 2009 following lessons learned from cultural heritage looting during the 2003 Iraq War."
+      },
+      {
+        id: 23,
+        shortName: "1968 Nuclear Non-Prolif. (NPT)",
+        name: "1968 Treaty on the Non-Proliferation of Nuclear Weapons (NPT)",
+        yearAdopted: 1968,
+        usRatifiedYear: 1970,
+        category: "Nuclear & WMD",
+        status: "Signed & Ratified",
+        partiesCount: 191,
+        ratifiers: "United States (1970), UK, France, Russia, China, Germany, Japan, South Korea, Brazil, South Africa, Iran, Ukraine, Canada, Australia",
+        nonRatifiers: "India, Pakistan, Israel, South Sudan (never joined), and North Korea (withdrew in 2003)",
+        reason: "Depositary state and original architect; anchors U.S. nuclear non-proliferation, extended deterrence, and disarmament policy."
+      },
+      {
+        id: 24,
+        shortName: "1972 Biological Weapons (BWC)",
+        name: "1972 Biological Weapons Convention (BWC)",
+        yearAdopted: 1972,
+        usRatifiedYear: 1975,
+        category: "Nuclear & WMD",
+        status: "Signed & Ratified",
+        partiesCount: 187,
+        ratifiers: "United States (1975), UK, France, Russia, China, Germany, Japan, India, Pakistan, Iran, North Korea, Brazil, Canada, Australia",
+        nonRatifiers: "Israel, Egypt, Syria, Haiti, Chad, Eritrea, Somalia, Comoros, Djibouti, Kiribati",
+        reason: "President Nixon unilaterally terminated the U.S. offensive biological weapons program in 1969 and championed the BWC, ratified in 1975."
+      },
+      {
+        id: 25,
+        shortName: "1977 ENMOD Convention",
+        name: "1977 Convention on the Prohibition of Environmental Modification Techniques (ENMOD)",
+        yearAdopted: 1977,
+        usRatifiedYear: 1980,
+        category: "Conduct of Hostilities",
+        status: "Signed & Ratified",
+        partiesCount: 78,
+        ratifiers: "United States (1980), UK, Russia, Germany, Japan, India, Pakistan, North Korea, South Korea, Brazil, Canada, Australia, Ukraine",
+        nonRatifiers: "France, China, Israel, Iran, Saudi Arabia, Indonesia, Mexico, South Africa, Spain (many states rely on Geneva Protocol I instead)",
+        reason: "Negotiated jointly by the U.S. and USSR to prohibit hostile weather or geophysical warfare following Vietnam-era cloud-seeding controversies."
+      },
+      {
+        id: 26,
+        shortName: "1980 CCW & Protocols I–V",
+        name: "1980 Convention on Certain Conventional Weapons (CCW & Protocols I–V)",
+        yearAdopted: 1980,
+        usRatifiedYear: 1995,
+        category: "Conventional Weapons",
+        status: "Signed & Ratified",
+        partiesCount: 128,
+        ratifiers: "United States (1995–2009), UK, France, Germany, Russia, China, Japan, India, Pakistan, Israel, Brazil, Canada, Australia, Ukraine",
+        nonRatifiers: "Iran, North Korea, Egypt, Indonesia, Malaysia, Nigeria, Kenya, Ethiopia, Vietnam, Myanmar",
+        reason: "Preferred U.S. consensus forum for regulating conventional weapons (blinding lasers, incendiary weapons, mines, explosive remnants of war)."
+      },
+      {
+        id: 27,
+        shortName: "1984 UN Torture Convention",
+        name: "1984 UN Convention Against Torture and Other Cruel, Inhuman or Degrading Treatment",
+        yearAdopted: 1984,
+        usRatifiedYear: 1994,
+        category: "Accountability & Tribunals",
+        status: "Signed & Ratified",
+        partiesCount: 174,
+        ratifiers: "United States (1994), UK, France, Germany, Russia, China, Japan, Israel, Brazil, Canada, Australia, South Africa, Ukraine, Saudi Arabia",
+        nonRatifiers: "India (signed, not ratified), Iran, North Korea, Malaysia, Myanmar, Singapore, Tanzania, Zimbabwe, Haiti",
+        reason: "Ratified by the U.S. Senate in 1994 with reservations aligning the treaty definition of cruel/inhuman treatment with the U.S. Constitution."
+      },
+      {
+        id: 28,
+        shortName: "1993 Chemical Weapons (CWC)",
+        name: "1993 Chemical Weapons Convention (CWC)",
+        yearAdopted: 1993,
+        usRatifiedYear: 1997,
+        category: "Nuclear & WMD",
+        status: "Signed & Ratified",
+        partiesCount: 193,
+        ratifiers: "United States (1997), UK, France, Germany, Russia, China, Japan, India, Pakistan, Iran, Syria, Brazil, Canada, Australia, Ukraine",
+        nonRatifiers: "North Korea, Egypt, South Sudan (never signed); Israel and Myanmar (signed, not ratified)",
+        reason: "Ratified by the U.S. in 1997; the U.S. completed the verified destruction of its entire declared chemical weapons stockpile in July 2023."
+      },
+      {
+        id: 29,
+        shortName: "2000 Child Soldiers Protocol",
+        name: "2000 Optional Protocol to the CRC on Involvement of Children in Armed Conflict",
+        yearAdopted: 2000,
+        usRatifiedYear: 2002,
+        category: "Conduct of Hostilities",
+        status: "Signed & Ratified",
+        partiesCount: 173,
+        ratifiers: "United States (2002), UK, France, Germany, Russia, China, Japan, India, Israel, Brazil, Canada, Australia, Ukraine, South Korea",
+        nonRatifiers: "Iran, North Korea, Myanmar, Somalia, Lebanon, Haiti, Papua New Guinea, Zambia, Liberia",
+        reason: "Ratified by the U.S. in 2002 even without ratifying the underlying 1989 CRC, prohibiting deployment of under-18 personnel into direct hostilities."
+      },
+      {
+        id: 30,
+        shortName: "2005 Geneva Protocol III",
+        name: "2005 Additional Protocol III to the Geneva Conventions (Red Crystal Emblem)",
+        yearAdopted: 2005,
+        usRatifiedYear: 2007,
+        category: "Conduct of Hostilities",
+        status: "Signed & Ratified",
+        partiesCount: 79,
+        ratifiers: "United States (2007), UK, France, Germany, Russia, Canada, Australia, Japan, Israel, Brazil, Ukraine, Italy, Spain, Switzerland",
+        nonRatifiers: "China, India, Pakistan, Iran, Saudi Arabia, Egypt, Indonesia, South Africa, Nigeria, South Korea, North Korea",
+        reason: "Strongly backed and ratified by the U.S. in 2007 to establish the neutral Red Crystal emblem and integrate Israel's Magen David Adom into the Red Cross movement."
       }
     ];
 
@@ -448,7 +672,8 @@
       "All",
       "Never Signed",
       "Signed, Not Ratified",
-      "Signature Withdrawn"
+      "Signature Withdrawn",
+      "Signed & Ratified"
     ];
 
     const STATUS_COLORS = {
@@ -475,12 +700,21 @@
         badgeText: "text-purple-700",
         badgeBorder: "border-purple-200",
         dot: "bg-purple-600"
+      },
+      "Signed & Ratified": {
+        fill: "#94a3b8",       // slate-400 (muted grey background)
+        stroke: "#64748b",     // slate-500
+        badgeBg: "bg-slate-100",
+        badgeText: "text-slate-700",
+        badgeBorder: "border-slate-300",
+        dot: "bg-slate-400"
       }
     };
 
     let state = {
       selectedCategory: "All",
       selectedStatus: "All",
+      showRatifiedBg: true,
       searchQuery: "",
       selectedTreatyId: 11 // Default highlight: Rome Statute (ICC)
     };
@@ -491,6 +725,9 @@
     function getFilteredTreaties() {
       const q = state.searchQuery.trim().toLowerCase();
       return TREATIES.filter(t => {
+        if (!state.showRatifiedBg && t.status === "Signed & Ratified" && state.selectedStatus !== "Signed & Ratified") {
+          return false;
+        }
         const catMatch = state.selectedCategory === "All" || t.category === state.selectedCategory;
         const statusMatch = state.selectedStatus === "All" || t.status === state.selectedStatus;
         const searchMatch = !q ||
@@ -499,7 +736,8 @@
           t.ratifiers.toLowerCase().includes(q) ||
           t.nonRatifiers.toLowerCase().includes(q) ||
           t.reason.toLowerCase().includes(q) ||
-          String(t.yearAdopted).includes(q);
+          String(t.yearAdopted).includes(q) ||
+          (t.usRatifiedYear && String(t.usRatifiedYear).includes(q));
         return catMatch && statusMatch && searchMatch;
       });
     }
@@ -541,6 +779,17 @@
         `;
       }).join("");
 
+      // Sync toggle button state
+      const toggleText = document.getElementById("toggleRatifiedText");
+      const toggleBtn = document.getElementById("toggleRatifiedBtn");
+      if (state.showRatifiedBg || state.selectedStatus === "Signed & Ratified") {
+        toggleText.textContent = "Hide U.S. Ratified (Grey)";
+        toggleBtn.classList.remove("opacity-60");
+      } else {
+        toggleText.textContent = "Show U.S. Ratified (Grey)";
+        toggleBtn.classList.add("opacity-60");
+      }
+
       // Sync KPI cards active ring
       document.querySelectorAll(".status-kpi").forEach(card => {
         const cardStatus = card.getAttribute("data-status-card");
@@ -561,14 +810,18 @@
 
       statusContainer.querySelectorAll(".status-pill").forEach(btn => {
         btn.addEventListener("click", () => {
-          state.selectedStatus = btn.getAttribute("data-status");
+          const st = btn.getAttribute("data-status");
+          state.selectedStatus = st;
+          if (st === "Signed & Ratified") {
+            state.showRatifiedBg = true;
+          }
           updateAll();
         });
       });
     }
 
     // =========================================================================
-    // 5. RENDER SVG TIMELINE CHART (WITH COLLISION OFFSETS FOR CO-LOCATED YEARS)
+    // 5. RENDER SVG TIMELINE CHART (GREY RATIFIED IN BACKGROUND, COLORED IN FRONT)
     // =========================================================================
     function renderTimelineChart() {
       const svg = document.getElementById("timelineSvg");
@@ -578,9 +831,9 @@
       document.getElementById("visibleCount").textContent = filtered.length;
 
       // SVG coordinate space
-      const width = 1040;
-      const height = 430;
-      const margin = { top: 32, right: 44, bottom: 52, left: 195 };
+      const width = 1080;
+      const height = 470;
+      const margin = { top: 32, right: 48, bottom: 52, left: 195 };
       const plotW = width - margin.left - margin.right;
       const plotH = height - margin.top - margin.bottom;
 
@@ -603,17 +856,28 @@
       };
 
       // Radius scale (partiesCount 1 -> 196)
-      const rScale = (parties) => {
-        if (parties <= 1) return 10;
-        return 11 + Math.sqrt(parties / 196) * 19; // 11px to 30px
+      const rScale = (parties, isRatified) => {
+        const base = parties <= 1 ? 10 : 11 + Math.sqrt(parties / 196) * 18;
+        return isRatified ? base * 0.88 : base;
       };
 
-      // Small vertical/horizontal nudge for treaties in the exact same year & category (e.g., 1899 or 1977)
+      // Positional nudges to prevent overlapping bubbles in dense clusters
       const offsets = {
-        1: { dx: -7, dy: -16 }, // 1899 Gas
-        2: { dx: 7, dy: 16 },   // 1899 Bullets
-        5: { dx: -8, dy: -17 }, // 1977 Protocol I
-        6: { dx: 8, dy: 17 }    // 1977 Protocol II
+        1: { dx: -7, dy: -18 },   // 1899 Gas (Non-Party)
+        2: { dx: 7, dy: 18 },     // 1899 Bullets (Non-Party)
+        3: { dx: 0, dy: -14 },    // 1907 Prize Court
+        5: { dx: -8, dy: -20 },   // 1977 Protocol I (Non-Party)
+        6: { dx: 8, dy: 19 },     // 1977 Protocol II (Non-Party)
+        7: { dx: -4, dy: -16 },   // 1989 CRC
+        8: { dx: 2, dy: 18 },     // 1994 UN Personnel
+        12: { dx: 6, dy: -18 },   // 1999 Hague Cultural 2nd
+        17: { dx: 0, dy: -22 },   // 1907 Hague Conventions (Ratified)
+        19: { dx: 0, dy: 18 },    // 1929 Geneva POW (Ratified)
+        21: { dx: 0, dy: -18 },   // 1949 Geneva Conventions (Ratified)
+        22: { dx: 0, dy: 20 },    // 1954 Hague Cultural (Ratified)
+        25: { dx: 0, dy: 26 },    // 1977 ENMOD (Ratified)
+        29: { dx: -4, dy: 22 },   // 2000 Child Soldiers (Ratified)
+        30: { dx: 6, dy: 16 }     // 2005 Geneva Protocol III (Ratified)
       };
 
       let svgParts = [];
@@ -628,7 +892,6 @@
             stroke="#e2e8f0" stroke-width="1" />
         `);
 
-        // Category label on left
         const words = cat.split(" & ");
         if (words.length === 2) {
           svgParts.push(`
@@ -663,53 +926,61 @@
         `);
       });
 
-      // Historical Era Annotations
-      svgParts.push(`
-        <text x="${xScale(1949)}" y="${margin.top - 10}" text-anchor="middle" fill="#94a3b8" font-size="10" font-weight="600">
-          1949 Geneva Conventions (U.S. Ratified)
-        </text>
-        <line x1="${xScale(1949)}" y1="${margin.top}" x2="${xScale(1949)}" y2="${margin.top + plotH}"
-          stroke="#cbd5e1" stroke-width="1.2" />
-      `);
+      // Draw U.S.-Ratified (grey) treaties FIRST so they sit cleanly in the background,
+      // then draw U.S. Non-Party (colored) treaties ON TOP in the foreground.
+      const ratifiedList = TREATIES
+        .filter(t => t.status === "Signed & Ratified")
+        .sort((a, b) => b.partiesCount - a.partiesCount);
 
-      // Draw Treaty Bubbles (sort larger bubbles behind smaller ones so all remain clickable)
-      const sortedForDraw = [...TREATIES].sort((a, b) => b.partiesCount - a.partiesCount);
+      const nonPartyList = TREATIES
+        .filter(t => t.status !== "Signed & Ratified")
+        .sort((a, b) => b.partiesCount - a.partiesCount);
 
-      sortedForDraw.forEach(t => {
+      const drawOrder = [...ratifiedList, ...nonPartyList];
+
+      drawOrder.forEach(t => {
+        const isRatified = t.status === "Signed & Ratified";
         const off = offsets[t.id] || { dx: 0, dy: 0 };
         const cx = xScale(t.yearAdopted) + off.dx;
         const cy = yCenter(t.category) + off.dy;
-        const r = rScale(t.partiesCount);
+        const r = rScale(t.partiesCount, isRatified);
         const col = STATUS_COLORS[t.status];
         const isVisible = filteredIds.has(t.id);
         const isSelected = state.selectedTreatyId === t.id;
 
-        // Label placement adjustment to prevent overlap
-        let labelY = cy + r + 13;
+        // Label placement adjustment
+        let labelY = cy + r + 12;
         let labelX = cx;
         let anchor = "middle";
 
-        if (t.id === 1 || t.id === 5) {
-          labelY = cy - r - 6;
+        if ([1, 5, 7, 12, 17, 21].includes(t.id)) {
+          labelY = cy - r - 5;
         }
         if (t.id === 16) {
           anchor = "end";
           labelX = cx + r;
         }
 
+        const fillOpacity = isRatified ? "0.42" : "0.88";
+        const strokeColor = isSelected ? "#0f172a" : (isRatified ? "#94a3b8" : "#ffffff");
+        const strokeDash = isRatified && !isSelected ? 'stroke-dasharray="2.5 2"' : "";
+        const textFill = isRatified ? "#64748b" : "#1e293b";
+        const countFill = isRatified ? "#334155" : "#ffffff";
+
         svgParts.push(`
-          <g class="treaty-node ${isVisible ? '' : 'dimmed'} ${isSelected ? 'selected' : ''}"
+          <g class="treaty-node ${isRatified ? 'ratified-bg' : ''} ${isVisible ? '' : 'dimmed'} ${isSelected ? 'selected' : ''}"
              data-id="${t.id}" tabindex="0" role="button" aria-label="${t.name}">
             <circle class="main-bubble" cx="${cx}" cy="${cy}" r="${r}"
-              fill="${col.fill}" fill-opacity="0.86"
-              stroke="${isSelected ? '#0f172a' : '#ffffff'}"
-              stroke-width="${isSelected ? 3 : 2}" />
-            <text x="${cx}" y="${cy + 3.5}" text-anchor="middle" fill="#ffffff"
-              font-size="${r > 16 ? '10.5' : '9'}" font-weight="700" pointer-events="none">
+              fill="${col.fill}" fill-opacity="${fillOpacity}"
+              stroke="${strokeColor}"
+              stroke-width="${isSelected ? 3 : 1.75}"
+              ${strokeDash} />
+            <text x="${cx}" y="${cy + 3.5}" text-anchor="middle" fill="${countFill}"
+              font-size="${r > 16 ? '10' : '8.5'}" font-weight="700" pointer-events="none">
               ${t.partiesCount}
             </text>
-            <text x="${labelX}" y="${labelY}" text-anchor="${anchor}" fill="#334155"
-              font-size="10" font-weight="600" pointer-events="none">
+            <text x="${labelX}" y="${labelY}" text-anchor="${anchor}" fill="${textFill}"
+              font-size="${isRatified ? '9' : '10'}" font-weight="${isRatified ? '500' : '600'}" pointer-events="none">
               ${t.shortName}
             </text>
           </g>
@@ -726,7 +997,7 @@
         node.addEventListener("mouseenter", (e) => showTooltip(treaty, e));
         node.addEventListener("mousemove", (e) => positionTooltip(e));
         node.addEventListener("mouseleave", hideTooltip);
-        node.addEventListener("focus", (e) => {
+        node.addEventListener("focus", () => {
           const rect = node.getBoundingClientRect();
           showTooltip(treaty, { clientX: rect.left + rect.width / 2, clientY: rect.top });
         });
@@ -746,6 +1017,9 @@
     function showTooltip(treaty, event) {
       if (!treaty) return;
       const col = STATUS_COLORS[treaty.status];
+      const usPostureLabel = treaty.usRatifiedYear
+        ? `U.S.: Signed & Ratified (${treaty.usRatifiedYear})`
+        : `U.S.: ${treaty.status}`;
 
       tooltipEl.innerHTML = `
         <div class="space-y-2.5">
@@ -754,7 +1028,7 @@
             <div>
               <div class="flex items-center gap-1.5 mb-1">
                 <span class="px-2 py-0.5 rounded-md text-[10px] font-bold uppercase tracking-wide bg-slate-800 text-slate-200 border border-slate-700">
-                  ${treaty.yearAdopted} &bull; ${treaty.category}
+                  Adopted ${treaty.yearAdopted} &bull; ${treaty.category}
                 </span>
               </div>
               <h4 class="font-bold text-sm text-white leading-snug">${treaty.name}</h4>
@@ -765,7 +1039,7 @@
           <div class="flex items-center justify-between bg-slate-800/80 rounded-xl px-3 py-1.5 border border-slate-700/60">
             <div class="flex items-center gap-1.5">
               <span class="w-2.5 h-2.5 rounded-full ${col.dot}"></span>
-              <span class="font-semibold text-slate-100">U.S.: ${treaty.status}</span>
+              <span class="font-semibold text-slate-100">${usPostureLabel}</span>
             </div>
             <div class="text-slate-300 font-semibold">
               <span class="text-white font-extrabold">${treaty.partiesCount}</span> States Parties
@@ -855,13 +1129,14 @@
       if (filtered.length === 0) {
         listEl.innerHTML = `
           <div class="p-8 text-center text-sm text-slate-500">
-            No treaties match your current filters. Click <strong>Reset All Filters</strong> to restore all 16 treaties.
+            No treaties match your current filters. Click <strong>Reset All Filters</strong> to restore all 30 treaties.
           </div>
         `;
       } else {
         listEl.innerHTML = filtered.map(t => {
           const col = STATUS_COLORS[t.status];
           const isSelected = t.id === state.selectedTreatyId;
+          const statusLabel = t.usRatifiedYear ? `Ratified (${t.usRatifiedYear})` : t.status;
           return `
             <button data-list-id="${t.id}"
               class="treaty-list-btn w-full text-left px-5 py-3.5 transition cursor-pointer flex items-start justify-between gap-3 ${
@@ -872,7 +1147,7 @@
                   <span class="text-xs font-bold text-slate-500">${t.yearAdopted}</span>
                   <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[11px] font-semibold border ${col.badgeBg} ${col.badgeText} ${col.badgeBorder}">
                     <span class="w-1.5 h-1.5 rounded-full ${col.dot}"></span>
-                    ${t.status}
+                    ${statusLabel}
                   </span>
                 </div>
                 <p class="text-sm font-semibold text-slate-900 leading-snug">${t.name}</p>
@@ -905,6 +1180,9 @@
       const selected = TREATIES.find(t => t.id === state.selectedTreatyId) || filtered[0] || TREATIES[0];
       const col = STATUS_COLORS[selected.status];
       const adoptionPct = Math.min(100, Math.round((selected.partiesCount / 196) * 100));
+      const detailStatusText = selected.usRatifiedYear
+        ? `U.S. Posture: Signed & Ratified (${selected.usRatifiedYear})`
+        : `U.S. Posture: ${selected.status}`;
 
       const detailEl = document.getElementById("detailPanel");
       detailEl.innerHTML = `
@@ -921,7 +1199,7 @@
                 </span>
                 <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-bold border ${col.badgeBg} ${col.badgeText} ${col.badgeBorder}">
                   <span class="w-2 h-2 rounded-full ${col.dot}"></span>
-                  U.S. Posture: ${selected.status}
+                  ${detailStatusText}
                 </span>
               </div>
               <h3 class="text-xl font-extrabold text-slate-900 leading-snug">
@@ -971,7 +1249,7 @@
           <!-- U.S. Diplomatic & Military Rationale -->
           <div class="rounded-xl bg-slate-900 text-slate-100 p-4 sm:p-5">
             <div class="text-xs font-bold uppercase tracking-wider text-slate-400 mb-1.5">
-              U.S. Diplomatic, Constitutional &amp; Military Rationale
+              U.S. Diplomatic, Constitutional &amp; Military Context
             </div>
             <p class="text-sm text-slate-100 leading-relaxed">
               ${selected.reason}
@@ -996,8 +1274,20 @@
         card.addEventListener("click", () => {
           const st = card.getAttribute("data-status-card");
           state.selectedStatus = (state.selectedStatus === st && st !== "All") ? "All" : st;
+          if (state.selectedStatus === "Signed & Ratified") {
+            state.showRatifiedBg = true;
+          }
           updateAll();
         });
+      });
+
+      // Toggle grey U.S.-ratified background layer
+      document.getElementById("toggleRatifiedBtn").addEventListener("click", () => {
+        state.showRatifiedBg = !state.showRatifiedBg;
+        if (!state.showRatifiedBg && state.selectedStatus === "Signed & Ratified") {
+          state.selectedStatus = "All";
+        }
+        updateAll();
       });
 
       // Search input
@@ -1011,6 +1301,7 @@
       document.getElementById("resetFiltersBtn").addEventListener("click", () => {
         state.selectedCategory = "All";
         state.selectedStatus = "All";
+        state.showRatifiedBg = true;
         state.searchQuery = "";
         searchInput.value = "";
         updateAll();
